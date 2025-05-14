@@ -1,0 +1,2304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S2ST Demo - Translation Results</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', 'Segoe UI', sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      background: #fff;
+      padding: 40px 30px;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      color: #222;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    h2 {
+      font-size: 1.75rem;
+      padding: 10px 15px;
+      margin: 40px 0 20px;
+      border-left: 8px solid #ccc;
+      background-color: #f4f6f8;
+      border-radius: 6px;
+      text-align: center;
+    }
+    h2[data-type="main"] {
+      border-color: #b2ebf2;
+      background-color: #e0f7fa;
+    }
+    h2[data-type="low"] {
+      border-color: #ffe0b2;
+      background-color: #fff3e0;
+    }
+    h2[data-type="fr"] {
+      border-color: #c5e1a5;
+      background-color: #f1f8e9;
+    }
+    h2[data-type="es"] {
+      border-color: #aed581;
+      background-color: #f1f8e9;
+    }
+    h2[data-type="de"] {
+      border-color: #9ccc65;
+      background-color: #f1f8e9;
+    }
+    h2[data-type="it"] {
+      border-color: #ffe082;
+      background-color: #fffde7;
+    }
+    h2[data-type="ru"] {
+      border-color: #ffd54f;
+      background-color: #fffde7;
+    }
+    h2[data-type="branchformer"] {
+      border-color: #d1c4e9;
+      background-color: #ede7f6;
+    }
+    h2[data-type="es-branch"] {
+      border-color: #ce93d8;
+      background-color: #f3e5f5;
+    }
+    h3 {
+      font-size: 1.4rem;
+      color: #2c3e50;
+      margin-top: 40px;
+      text-align: center;
+    }
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      color: #555;
+      text-align: center;
+    }
+    ul {
+      font-size: 1.05rem;
+      padding-left: 25px;
+      text-align: left;
+    }
+    ul li {
+      margin-bottom: 8px;
+    }
+    .intro {
+    text-align: left;
+    }
+    a {
+      color: #1e88e5;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 30px 0;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+    audio {
+      width: 100%;
+    }
+    .image-section {
+      display: flex;
+      justify-content: center;
+      margin: 40px auto;
+    }
+    .image-container {
+      text-align: center;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .image-container img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    .image-container p {
+      margin-top: 12px;
+      font-size: 1rem;
+      color: #666;
+    }
+    .toc {
+      text-align: center;
+      margin-top: 40px;
+    }
+    .toc h3 {
+      margin-bottom: 15px;
+      font-size: 1.4rem;
+      color: #444;
+    }
+    .toc div {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+    .toc a {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      display: inline-block;
+    }
+    .toc a[href="#main"] {
+      background-color: #e0f7fa;
+      border: 1px solid #b2ebf2;
+    }
+    .toc a[href="#fr-en"] {
+      background-color: #f1f8e9;
+      border: 1px solid #c5e1a5;
+    }
+    .toc a[href="#es-en"] {
+      background-color: #f1f8e9;
+      border: 1px solid #aed581;
+    }
+    .toc a[href="#de-en"] {
+      background-color: #f1f8e9;
+      border: 1px solid #9ccc65;
+    }
+    .toc a[href="#lowresource"] {
+      background-color: #fff3e0;
+      border: 1px solid #ffe0b2;
+    }
+    .toc a[href="#fr-en-low"] {
+      background-color: #fffde7;
+      border: 1px solid #ffe082;
+    }
+    .toc a[href="#it-en"] {
+      background-color: #fffde7;
+      border: 1px solid #ffe082;
+    }
+    .toc a[href="#ru-en"] {
+      background-color: #fffde7;
+      border: 1px solid #ffd54f;
+    }
+    .toc a[href="#branchformer"] {
+      background-color: #ede7f6;
+      border: 1px solid #d1c4e9;
+    }
+    .toc a[href="#es-enbranchformer"] {
+      background-color: #f3e5f5;
+      border: 1px solid #ce93d8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Enhancing End-to-End Speech-to-Speech Translation via Semantic Representation Learning with Cross-Attentive Regularization</h1>
+
+    <p class="intro">
+      Multitask learning has been widely explored to improve end-to-end speech-to-speech translation (S2ST) systems, typically by incorporating auxiliary speech-based tasks such as automatic speech recognition (ASR) and speech-to-text translation (S2T). However, these tasks provide only indirect semantic supervision and may introduce noise due to acoustic variability. In this work, we propose a semantically enhanced multitask framework that introduces a text-to-unit (T2U) auxiliary task to provide explicit text-level supervision. To further bridge the modality gap between speech and text, we employ Cross-Attentive Regularization (CAR), an attention-based loss that encourages alignment between speech and text encoder representations. We also adopt a teacher-student training strategy where a pretrained T2U model serves as a fixed semantic teacher to guide the speech encoder. Experiments on the CVSS-C corpus show that our method consistently improves over a basic S2UT baseline, achieving BLEU gains of +2.0 (Fr–En), +3.8 (Es–En),and +2.4 (De–Ee), along with substantial improvements in semantic similarity as measured by Sentence-BERT. Additional experiments under low-resource conditions and with alternative encoders (e.g., Branchformer) further validate the generalizability of our approach.
+    </p>
+
+    <div class="image-section">
+      <div class="image-container">
+        <img src="figure/structure.png" alt="SC-S2UT System Workflow Overview">
+        <p>Figure 1: Overall architecture of the proposed S2ST framework with text-to-unit supervision and cross-attentive regularization</p>
+      </div>
+    </div>
+
+    <div class="toc" style="text-align:center; margin-top: 40px;">
+  <h3 style="margin-bottom: 15px; font-size: 1.4rem; color: #444;">🔗 Quick Navigation</h3>
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;">
+    <a href="#main" style="padding: 10px 20px; background-color: #e0f7fa; border-radius: 8px; border: 1px solid #b2ebf2; font-weight: bold;">Main Result:</a>
+    <a href="#fr-en" style="padding: 10px 20px; background-color: #f1f8e9; border-radius: 8px; border: 1px solid #dcedc8;">Fr-En</a>
+    <a href="#es-en" style="padding: 10px 20px; background-color: #f1f8e9; border-radius: 8px; border: 1px solid #dcedc8;">Es-En</a>
+    <a href="#de-en" style="padding: 10px 20px; background-color: #f1f8e9; border-radius: 8px; border: 1px solid #dcedc8;">De-En</a>
+    <a href="#lowresource" style="padding: 10px 20px; background-color: #fff3e0; border-radius: 8px; border: 1px solid #ffe0b2; font-weight: bold;">Low Resource:</a>
+    <a href="#fr-en-low" style="padding: 10px 20px; background-color: #fffde7; border-radius: 8px; border: 1px solid #fff9c4;">Fr-En</a>
+    <a href="#it-en" style="padding: 10px 20px; background-color: #fffde7; border-radius: 8px; border: 1px solid #fff9c4;">It-En</a>
+    <a href="#ru-en" style="padding: 10px 20px; background-color: #fffde7; border-radius: 8px; border: 1px solid #fff9c4;">Ru-En</a>
+    <a href="#branchformer" style="padding: 10px 20px; background-color: #ede7f6; border-radius: 8px; border: 1px solid #d1c4e9; font-weight: bold;">Branchformer:</a>
+    <a href="#es-enbranchformer" style="padding: 10px 20px; background-color: #f3e5f5; border-radius: 8px; border: 1px solid #e1bee7;">Es-En</a>
+  </div>
+</div>
+
+
+    <div class="section-main-result">
+      <h2 id="main" data-type="main">Main Result</h2>
+      <h2 id="fr-en" data-type="fr">Fr-En Translation Results</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2">Sample</th>
+                    <th colspan="2">Ground Truth</th>
+                    <th colspan="5">Translation</th>
+                </tr>
+                <tr>
+                    <th>Source (French)</th>
+                    <th>Target (English)</th>
+                    <th>S2ST</th>
+                    <th>+T2U</th>
+                    <th>+PreT2U</th>
+                    <th>+T2U+CAR</th>
+                    <th>+PreT2U+CAR</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Sample1</td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/main/fr-en/sample1/src.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/main/fr-en/sample1/ref.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/main/fr-en/sample1/s2ut.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/main/fr-en/sample1/t2u.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/main/fr-en/sample1/t2u_pretrain.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+
+                    <td>
+                        <audio controls>
+                            <source src="waveform/main/fr-en/sample1/car.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/main/fr-en/sample1/car_pretrain.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+
+
+                </tr>
+                <tr>
+                    <td>Reference</td>
+                    <td>
+                      Le nom de ce comté provient de l'ancien gouverneur territorial du Nebraska William Richardson.
+                    </td>
+                    <td>
+                      the name of this county comes from the former territorial governor of nebraska william richardson
+                    </td>
+                    <td>
+                        
+                    </td>
+                    <td>
+                        
+                    </td>
+                    <td>
+                        
+                    </td>
+                    <td>
+                        
+                    </td>
+                    <td>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td>ASR</td>
+                    <td>
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                      the name of this contay comes from the former territorial governor of nebraster william richardson
+                    </td>
+                    <td>
+                      a number of this county comes from the former land governor when nebraska will him richardson
+                    </td>
+                    <td>
+                      name of this county comes from the former land land governor of nebraska william richardson
+                    </td>
+                    <td>
+                      the name of this county comes from the former governor of the former territorial nebraska william richardson
+                    </td>
+                    <td>
+                      the name of this county comes from the former territorial governor of nebraska william richardson
+                    </td>
+                </tr>
+
+                <tr>
+                  <td>Sample2</td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/main/fr-en/sample2/src.mp3" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/main/fr-en/sample2/ref.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/main/fr-en/sample2/s2ut.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/main/fr-en/sample2/t2u.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/main/fr-en/sample2/t2u_pretrain.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+
+                  <td>
+                      <audio controls>
+                          <source src="waveform/main/fr-en/sample2/car.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/main/fr-en/sample2/car_pretrain.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+
+
+              </tr>
+              <tr>
+                  <td>Reference</td>
+                  <td>
+                    Il remporte quatre compétitions européennes et deux fois le Championnat d'Italie
+                  </td>
+                  <td>
+                    he won four european competitions and twice the italian championship
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+              </tr>
+              <tr>
+                  <td>ASR</td>
+                  <td>
+                  </td>
+                  <td>
+
+                  </td>
+                  <td>
+                    he wins four european competitions in twice the italy champingship
+                  </td>
+                  <td>
+                    he won four european competitions and twice the italy
+                  </td>
+                  <td>
+                    he wins for european competitions and twice the italian channingship
+                  </td>
+                  <td>
+                    he wins for european competitions and two times the italian chandingship
+                  </td>
+                  <td>
+                    he won four european competitions and twice the italian championship
+                  </td>
+              </tr>
+
+              <tr>
+                <td>Sample3</td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/main/fr-en/sample3/src.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/main/fr-en/sample3/ref.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/main/fr-en/sample3/s2ut.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/main/fr-en/sample3/t2u.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/main/fr-en/sample3/t2u_pretrain.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+
+                <td>
+                    <audio controls>
+                        <source src="waveform/main/fr-en/sample3/car.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/main/fr-en/sample3/car_pretrain.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+
+
+            </tr>
+            <tr>
+                <td>Reference</td>
+                <td>
+                  C'est l'une des plus anciennes et des plus grandes communautés intentionnelles d'Amérique du Nord.
+                </td>
+                <td>
+                  it is one of the oldest and largest intentional communities in north america
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                    
+                </td>
+            </tr>
+            <tr>
+                <td>ASR</td>
+                <td>
+                </td>
+                <td>
+
+                </td>
+                <td>
+                  it is one of the oldest most intentional america in north america
+                </td>
+                <td>
+                  it is one of the oldest intentional american north communities
+                </td>
+                <td>
+                  it is one of the oldest intentional largest intentional communities in north america
+                </td>
+                <td>
+                  it is one of the oldest and intentional american communities of north america 
+                </td>
+                <td>
+                  it is one of the oldest from the greatest intentional communities of north america
+                </td>
+            </tr>
+
+            <tr>
+              <td>Sample4</td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/main/fr-en/sample4/src.mp3" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/main/fr-en/sample4/ref.wav" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/main/fr-en/sample4/s2ut.wav" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/main/fr-en/sample4/t2u.wav" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/main/fr-en/sample4/t2u_pretrain.wav" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+
+              <td>
+                  <audio controls>
+                      <source src="waveform/main/fr-en/sample4/car.wav" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/main/fr-en/sample4/car_pretrain.wav" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+
+
+          </tr>
+          <tr>
+              <td>Reference</td>
+              <td>
+                Quel est l’avis du Gouvernement ? Pour les mêmes raisons, avis défavorable
+              </td>
+              <td>
+                what is the government's opinion for the same reasons unfavorable
+              </td>
+              <td>
+                  
+              </td>
+              <td>
+                  
+              </td>
+              <td>
+                  
+              </td>
+              <td>
+                  
+              </td>
+              <td>
+                  
+              </td>
+          </tr>
+          <tr>
+              <td>ASR</td>
+              <td>
+              </td>
+              <td>
+
+              </td>
+              <td>
+                what is the government's opinion for the same reasons unfavorable opinion
+              </td>
+              <td>
+                what is the government's opinion for the same reasons unfavorable opinions
+              </td>
+              <td>
+                what is the opinion of the government for the same reasons unfavorable opinion
+              </td>
+              <td>
+                what is the opinion of the government at the same reasons unfavorable opinion 
+              </td>
+              <td>
+                what is the government's opinion for the same reasons unfavorable
+              </td>
+          </tr>
+
+            </tbody>
+        </table>
+
+        <!-- ES-En Section -->
+        <h2 id="es-en" data-type="es">Es-En Translation Results</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2">Sample</th>
+                    <th colspan="2">Ground Truth</th>
+                    <th colspan="5">Translation</th>
+                </tr>
+                <tr>
+                    <th>Source (Spanish)</th>
+                    <th>Target (English)</th>
+                    <th>S2ST</th>
+                    <th>+T2U</th>
+                    <th>+PreT2U</th>
+                    <th>+T2U+CAR</th>
+                    <th>+PreT2U+CAR</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Sample1</td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/main/es-en/sample1/src.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/main/es-en/sample1/ref.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/main/es-en/sample1/s2ut.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/main/es-en/sample1/t2u.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/main/es-en/sample1/t2u_pretrain.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+
+                    <td>
+                        <audio controls>
+                            <source src="waveform/main/es-en/sample1/car.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/main/es-en/sample1/car_pretrain.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+
+
+                </tr>
+                <tr>
+                    <td>Reference</td>
+                    <td>
+                      Su cuerpo fue recuperado y enterrado por su unidad
+                    </td>
+                    <td>
+                      his body was recovered and buried by his unit
+                    </td>
+                    <td>
+    
+                    </td>
+                    <td>
+                        
+                    </td>
+                    <td>
+                        
+                    </td>
+                    <td>
+                        
+                    </td>
+                    <td>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td>ASR</td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                      his body was refused and buried by his unit
+                    </td>
+                    <td>
+                      his body was recognized in territory for his unit
+                    </td>
+                    <td>
+                      his body was recovered and given by his united
+                    </td>
+                    <td>
+                      his body was recovered and interrogated by his use
+                    </td>
+                    <td>
+                      his body was recovered and buried by his unit
+                    </td>
+                </tr>
+
+                <tr>
+                  <td>Sample2</td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/main/es-en/sample2/src.mp3" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/main/es-en/sample2/ref.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/main/es-en/sample2/s2ut.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/main/es-en/sample2/t2u.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/main/es-en/sample2/t2u_pretrain.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+
+                  <td>
+                      <audio controls>
+                          <source src="waveform/main/es-en/sample2/car.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/main/es-en/sample2/car_pretrain.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+
+
+              </tr>
+              <tr>
+                  <td>Reference</td>
+                  <td>
+                    Sus partes superiores son principalmente negras y sus partes inferiores principalmente blancas
+                  </td>
+                  <td>
+                    its upper parts are mainly black and its lower parts are mainly white
+                  </td>
+                  <td>
+  
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+              </tr>
+              <tr>
+                  <td>ASR</td>
+                  <td>
+                  </td>
+                  <td>
+                  </td>
+                  <td>
+                    his upper parts are mainly blackets and their mainly white parts mainly
+                  </td>
+                  <td>
+                    its superior part sir mainly leads it and its inferior parts mainly
+                  </td>
+                  <td>
+                    its upper parts are mainly black and its parts in its mainly white sulphureure
+                  </td>
+                  <td>
+                    its upper parts are mainly black and its mainly white parts
+                  </td>
+                  <td>
+                    its upper parts are mainly black and its lower parts mainly white stalks
+                  </td>
+              </tr>
+
+              <tr>
+                <td>Sample3</td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/main/es-en/sample3/src.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/main/es-en/sample3/ref.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/main/es-en/sample3/s2ut.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/main/es-en/sample3/t2u.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/main/es-en/sample3/t2u_pretrain.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+
+                <td>
+                    <audio controls>
+                        <source src="waveform/main/es-en/sample3/car.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/main/es-en/sample3/car_pretrain.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+
+
+            </tr>
+            <tr>
+                <td>Reference</td>
+                <td>
+                  Fue la primera mujer en convertirse en piloto militar
+                </td>
+                <td>
+                  she was the first woman to become a military pilot
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                    
+                </td>
+            </tr>
+            <tr>
+                <td>ASR</td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                  she was the first woman to become an ill military pilot
+                </td>
+                <td>
+                  she was the first woman she became ceres military purposes
+                </td>
+                <td>
+                  she was the first woman to become military woman
+                </td>
+                <td>
+                  she was the first woman to become a military kind of military
+                </td>
+                <td>
+                  she was the first woman to become a military pilot
+                </td>
+            </tr>
+
+            <tr>
+              <td>Sample4</td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/main/es-en/sample4/src.mp3" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/main/es-en/sample4/ref.wav" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/main/es-en/sample4/s2ut.wav" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/main/es-en/sample4/t2u.wav" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/main/es-en/sample4/t2u_pretrain.wav" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+
+              <td>
+                  <audio controls>
+                      <source src="waveform/main/es-en/sample4/car.wav" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/main/es-en/sample4/car_pretrain.wav" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+
+
+          </tr>
+          <tr>
+              <td>Reference</td>
+              <td>
+                Es miembro honorario y fundador de muchas asociaciones científicas y profesionales
+              </td>
+              <td>
+                he is an honorary member and founder of many scientific and professional associations
+              </td>
+              <td>
+
+              </td>
+              <td>
+                  
+              </td>
+              <td>
+                  
+              </td>
+              <td>
+                  
+              </td>
+              <td>
+                  
+              </td>
+          </tr>
+          <tr>
+              <td>ASR</td>
+              <td>
+              </td>
+              <td>
+              </td>
+              <td>
+                he is an honorary member and founder of many scientific associations and professional
+              </td>
+              <td>
+                he is abroad casting in founder of many scientific associations in three faschele
+              </td>
+              <td>
+                he is an honorary member and founder of many scientific associations and professional associations
+              </td>
+              <td>
+                he is a founding member and founder by many scientific and interfectional scientists
+              </td>
+              <td>
+                he is an honorary member in founder of many scientific associations and professional associations
+              </td>
+          </tr>
+
+
+            </tbody>
+        </table>
+
+        <h2 id="de-en" data-type="de">De-En Translation Results</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2">Sample</th>
+                    <th colspan="2">Ground Truth</th>
+                    <th colspan="5">Translation</th>
+                </tr>
+                <tr>
+                    <th>Source (German)</th>
+                    <th>Target (English)</th>
+                    <th>S2ST</th>
+                    <th>+T2U</th>
+                    <th>+PreT2U</th>
+                    <th>+T2U+CAR</th>
+                    <th>+PreT2U+CAR</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Sample1</td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/main/de-en/sample1/src.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/main/de-en/sample1/ref.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/main/de-en/sample1/s2ut.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/main/de-en/sample1/t2u.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/main/de-en/sample1/t2u_pretrain.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+
+                    <td>
+                        <audio controls>
+                            <source src="waveform/main/de-en/sample1/car.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/main/de-en/sample1/car_pretrain.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+
+
+                </tr>
+                <tr>
+                    <td>Reference</td>
+                    <td>
+                      Während dieser Zeit war sie Staatssekretärin im Hessischen Ministerium der Justiz und für Europaangelegenheiten
+                    </td>
+                    <td>
+                      during this time she was state secretary in the hessian ministry of justice and european affairs
+                    </td>
+                    <td>
+                        
+                    </td>
+                    <td>
+                        
+                    </td>
+                    <td>
+                        
+                    </td>
+                    <td>
+                        
+                    </td>
+                    <td>
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td>ASR</td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                      during this time she was stayed secretary in hassing ministry in european contain
+                    </td>
+                    <td>
+                      during this time she was secretary in hessian atmosphere in the hessian ministry of the europe
+                    </td>
+                    <td>
+                      during this time she was stayed secretary in hessian ministry in the use of justice in the europe
+                    </td>
+                    <td>
+                      during this time she was a secretary in the hesh ministry of the justice in four europe
+                    </td>
+                    <td>
+                      during this time she was the state secretary in hessian ministry of justice and for european conditions
+                    </td>
+                </tr>
+
+                <tr>
+                  <td>Sample2</td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/main/de-en/sample2/src.mp3" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/main/de-en/sample2/ref.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/main/de-en/sample2/s2ut.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/main/de-en/sample2/t2u.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/main/de-en/sample2/t2u_pretrain.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+
+                  <td>
+                      <audio controls>
+                          <source src="waveform/main/de-en/sample2/car.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/main/de-en/sample2/car_pretrain.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+
+
+              </tr>
+              <tr>
+                  <td>Reference</td>
+                  <td>
+                    Sein Hauptforschungsgebiet war die byzantinische Architektur, insbesondere der mittel- und spätbyzantinischen Zeit.
+                  </td>
+                  <td>
+                    his main research area was byzantine architecture especially from the middle byzantine and late byzantine periods
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+              </tr>
+              <tr>
+                  <td>ASR</td>
+                  <td>
+                  </td>
+                  <td>
+                  </td>
+                  <td>
+                    his main research research was the byzantine architecture is the mediaeval and later byzantine byzantine time
+                  </td>
+                  <td>
+                    his main research was the previous santina architecture especially the middle of the byzantine time
+                  </td>
+                  <td>
+                    his main research area was the tenton architecture especially the middle in late visiting times
+                  </td>
+                  <td>
+                    his main research was the byzantine architecture especially the mother of visiting tea time
+                  </td>
+                  <td>
+                    his main research was the byzantine architecture especially of the middle and late byzantine time
+                  </td>
+              </tr>
+
+              <tr>
+                <td>Sample3</td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/main/de-en/sample3/src.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/main/de-en/sample3/ref.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/main/de-en/sample3/s2ut.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/main/de-en/sample3/t2u.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/main/de-en/sample3/t2u_pretrain.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+
+                <td>
+                    <audio controls>
+                        <source src="waveform/main/de-en/sample3/car.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/main/de-en/sample3/car_pretrain.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+
+
+            </tr>
+            <tr>
+                <td>Reference</td>
+                <td>
+                  Im selben Jahr wurde er ordentliches Mitglied im Provinzialausschuss der preußischen Provinz Hannover
+                </td>
+                <td>
+                  that same year he became a full member of the provincial committee of the prussian province of hannover
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                    
+                </td>
+            </tr>
+            <tr>
+                <td>ASR</td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                  in the same year he became full member of the prussian committee of prussian committee of hanover
+                </td>
+                <td>
+                  in the same year he became a member of the provincial provincial province of hanover
+                </td>
+                <td>
+                  in the same year he became the provincial committee of the prussian province of hanover
+                </td>
+                <td>
+                  in the same year he became a member of the professional committee of provincial committee of province of hanover
+                </td>
+                <td>
+                  in the same year he became final member of the prussian committee of the prussian provinces of  hanover
+                </td>
+            </tr>
+
+            <tr>
+              <td>Sample4</td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/main/de-en/sample4/src.mp3" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/main/de-en/sample4/ref.wav" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/main/de-en/sample4/s2ut.wav" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/main/de-en/sample4/t2u.wav" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/main/de-en/sample4/t2u_pretrain.wav" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+
+              <td>
+                  <audio controls>
+                      <source src="waveform/main/de-en/sample4/car.wav" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/main/de-en/sample4/car_pretrain.wav" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+
+
+          </tr>
+          <tr>
+              <td>Reference</td>
+              <td>
+                Während des Zweiten Weltkrieges wurde die amerikanische Tochter verkauft und arbeitete viele Jahre separat
+              </td>
+              <td>
+                during the second world war the american daughter was sold and worked separately for many years
+              </td>
+              <td>
+                  
+              </td>
+              <td>
+                  
+              </td>
+              <td>
+                  
+              </td>
+              <td>
+                  
+              </td>
+              <td>
+                  
+              </td>
+          </tr>
+          <tr>
+              <td>ASR</td>
+              <td>
+              </td>
+              <td>
+              </td>
+              <td>
+                during world war two the american daughter was sold in working daughter
+              </td>
+              <td>
+                during the second world war the americans daughter was working in work in four years of world war
+              </td>
+              <td>
+                during the second world war the americans sought out and worked for many years working
+              </td>
+              <td>
+                during world war two the american daughter of second world war and worked four years later 
+              </td>
+              <td>
+                during the second world war the american daughter was sold and worked for many years
+              </td>
+          </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section-low-resource">
+      <h2 id="lowresource" data-type="low">Low Resource Result</h2>
+      <h2 id="fr-en-low" data-type="it">Fr-En Translation Results</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2">Sample</th>
+                    <th colspan="2">Ground Truth</th>
+                    <th colspan="4">Translation</th>
+                </tr>
+                <tr>
+                    <th>Source (French)</th>
+                    <th>Target (English)</th>
+                    <th>S2ST (10%FR)</th>
+                    <th>+PreT2U+CAR</th>
+                    <th>S2ST (30%FR)</th>
+                    <th>+PreT2U+CAR</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Sample1</td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/low/fr/sample1/src.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/low/fr/sample1/ref.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/low/fr/sample1/s2ut_10.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/low/fr/sample1/car_10.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/low/fr/sample1/s2ut_30.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+
+                    <td>
+                        <audio controls>
+                            <source src="waveform/low/fr/sample1/car_30.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+
+
+                </tr>
+                <tr>
+                    <td>Reference</td>
+                    <td>
+                      Le nom de ce comté provient de l'ancien gouverneur territorial du Nebraska William Richardson
+                    </td>
+                    <td>
+                      the name of this county comes from the former territorial governor of nebraska william richardson
+                    </td>
+                    <td>
+                        
+                    </td>
+                    <td>
+                        
+                    </td>
+                    <td>
+                        
+                    </td>
+                    <td>
+                        
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>ASR</td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                      the name of the conversary trograms over twas some regions particularly pick a lava in vision
+                    </td>
+                    <td>
+                      the name of this conte during taking at the north west including at the saxonristotle
+                    </td>
+                    <td>
+                      the number of the santi comes from the old western governor leaves richessen
+                    </td>
+                    <td>
+                      the name of this county comes from the old man territory to the nebbeson richardson   
+                    </td>
+                </tr>
+
+                <tr>
+                  <td>Sample2</td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/low/fr/sample2/src.mp3" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/low/fr/sample2/ref.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/low/fr/sample2/s2ut_10.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/low/fr/sample2/car_10.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/low/fr/sample2/s2ut_30.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+
+                  <td>
+                      <audio controls>
+                          <source src="waveform/low/fr/sample2/car_30.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+
+
+              </tr>
+              <tr>
+                  <td>Reference</td>
+                  <td>
+                    Il remporte quatre compétitions européennes et deux fois le Championnat d'Italie
+                  </td>
+                  <td>
+                    he won four european competitions and twice the italian championship
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+
+              </tr>
+              <tr>
+                  <td>ASR</td>
+                  <td>
+                  </td>
+                  <td>
+                  </td>
+                  <td>
+                    reports of the competition of assay to the operation during the town
+                  </td>
+                  <td>
+                    he became a repenative into appending sons on the southeast of the italian
+                  </td>
+                  <td>
+                    he will want four competitions and people in two times in the italian championship   
+                  </td>
+                  <td>
+                    he wins four competitions of the un piecemean and two forceds the italian champion 
+                  </td>
+              </tr>
+
+            </tbody>
+        </table>
+
+        <h2 id="it-en" data-type="it">It-En Translation Results</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2">Sample</th>
+                    <th colspan="2">Ground Truth</th>
+                    <th colspan="2">Translation</th>
+                </tr>
+                <tr>
+                    <th>Source (Italian)</th>
+                    <th>Target (English)</th>
+                    <th>S2ST</th>
+                    <th>+PreT2U+CAR</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Sample1</td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/low/it/sample1/src.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/low/it/sample1/ref.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/low/it/sample1/s2ut.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/low/it/sample1/car_pretrain.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+
+
+                </tr>
+                <tr>
+                    <td>Reference</td>
+                    <td>
+                      Il Ministero dei beni e delle attività culturali e del turismo vigila sulla corretta applicazione da parte dell’esercente
+                    </td>
+                    <td>
+                      the ministry of cultural heritage and activities and tourism supervises the right application by the operator
+                    </td>
+                    <td>
+                        
+                    </td>
+                    <td>
+                        
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>ASR</td>
+                    <td>
+                    </td>
+                    <td>
+  
+                    </td>
+                    <td>
+                      the minister having services in cultural heritage and torism to very established open solar systems from the services
+                    </td>
+                    <td>
+                      the minister of cultural heritage and cultural heritage you have to take over the applications of the section
+                    </td>
+                </tr>
+
+                <tr>
+                  <td>Sample2</td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/low/it/sample2/src.mp3" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/low/it/sample2/ref.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/low/it/sample2/s2ut.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/low/it/sample2/car_pretrain.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+
+
+              </tr>
+              <tr>
+                  <td>Reference</td>
+                  <td>
+                    Alcuni esempi potrebbero essere utili
+                  </td>
+                  <td>
+                    some examples might be useful
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+
+              </tr>
+              <tr>
+                  <td>ASR</td>
+                  <td>
+                  </td>
+                  <td>
+
+                  </td>
+                  <td>
+                    some examples could be useful serious resource
+                  </td>
+                  <td>
+                    some examples could be useful
+                  </td>
+              </tr>
+
+              <tr>
+                <td>Sample3</td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/low/it/sample3/src.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/low/it/sample3/ref.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/low/it/sample3/s2ut.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/low/it/sample3/car_pretrain.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+
+
+            </tr>
+            <tr>
+                <td>Reference</td>
+                <td>
+                  Fu la prima donna sepolta nel cimitero
+                </td>
+                <td>
+                  she was the first woman to be buried in the cemetery
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                    
+                </td>
+
+            </tr>
+            <tr>
+                <td>ASR</td>
+                <td>
+                </td>
+                <td>
+
+                </td>
+                <td>
+                  he was the first time during the first midroo
+                </td>
+                <td>
+                  she was the first woman had been in the sea ground
+                </td>
+            </tr>
+
+
+            </tbody>
+        </table>
+
+        <h2 id="ru-en" data-type="ru">Ru-En Translation Results</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2">Sample</th>
+                    <th colspan="2">Ground Truth</th>
+                    <th colspan="2">Translation</th>
+                </tr>
+                <tr>
+                    <th>Source (Russian)</th>
+                    <th>Target (English)</th>
+                    <th>S2ST </th>
+                    <th>+PreT2U+CAR</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Sample1</td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/low/ru/sample1/src.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/low/ru/sample1/ref.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/low/ru/sample1/s2ut.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/low/ru/sample1/car_pretrain.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+
+
+                </tr>
+                <tr>
+                    <td>Reference</td>
+                    <td>
+                      Этот проект резолюции призван значительно укрепить глобальный режима ядерного разоружения и ядерного нераспространения
+                    </td>
+                    <td>
+                      this draft resolution is intended to intensify the global nuclear disarmament and nuclear non proliferation regime
+                    </td>
+                    <td>
+                        
+                    </td>
+                    <td>
+                        
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>ASR</td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                      his document should be based on the support and i emphasize the clinical commitment of the members of the organization
+                    </td>
+                    <td>
+                      his strata resolution contributes the globeal new clear disarmament and non proliferation and new clear disarmament
+                    </td>
+                </tr>
+
+                <tr>
+                  <td>Sample2</td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/low/ru/sample2/src.mp3" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/low/ru/sample2/ref.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/low/ru/sample2/s2ut.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/low/ru/sample2/car_pretrain.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+
+
+              </tr>
+              <tr>
+                  <td>Reference</td>
+                  <td>
+                    Благодарю посла Японии за его заявление
+                  </td>
+                  <td>
+                    i thank the ambassador of japan for his statement
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+
+              </tr>
+              <tr>
+                  <td>ASR</td>
+                  <td>
+                  </td>
+                  <td>
+                  </td>
+                  <td>
+                    i thanked the ambassador of argentina for his statement
+                  </td>
+                  <td>
+                    thanks the ambassador of japan for his statement
+                  </td>
+              </tr>
+
+              <tr>
+                <td>Sample3</td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/low/ru/sample3/src.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/low/ru/sample3/ref.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/low/ru/sample3/s2ut.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/low/ru/sample3/car_pretrain.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+
+
+            </tr>
+            <tr>
+                <td>Reference</td>
+                <td>
+                  У нас нет иного выбора, кроме как добиваться прогресса в рамках Конференции по разоружению
+                </td>
+                <td>
+                  we have no choice but to make progress in the conference on disarmament
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                    
+                </td>
+
+            </tr>
+            <tr>
+                <td>ASR</td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                  in this regard the republic of courier is not limited to sermon met mechanism
+                <td>
+                  in accordantly we repeat the progress and the convention with the constance unto sermonant
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section-branchformer">
+      <h2 id="branchformer" data-type="branchformer">Branchformer Result</h2>
+      <h2 id="es-enbranchformer" data-type="es-branch">Es-En Translation Results</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2">Sample</th>
+                    <th colspan="2">Ground Truth</th>
+                    <th colspan="2">Translation</th>
+                </tr>
+                <tr>
+                    <th>Source (Spanish)</th>
+                    <th>Target (English)</th>
+                    <th>S2ST </th>
+                    <th>+PreT2U+CAR</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Sample1</td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/branchformer/sample1/src.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/branchformer/sample1/ref.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/branchformer/sample1/s2ut.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+                    <td>
+                        <audio controls>
+                            <source src="waveform/branchformer/sample1/car_pretrain.wav" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </td>
+
+
+                </tr>
+                <tr>
+                    <td>Reference</td>
+                    <td>
+                      Es miembro honorario y fundador de muchas asociaciones científicas y profesionales
+                    </td>
+                    <td>
+                      he is an honorary member and founder of many scientific and professional associations
+                    </td>
+                    <td>
+                        
+                    </td>
+                    <td>
+                        
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>ASR</td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                      he is a merit member in founder given many scientific scientists and professional associations
+                    </td>
+                    <td>
+                      he is a great member and founder of many scientific and professional associations
+                    </td>
+                </tr>
+
+                <tr>
+                  <td>Sample2</td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/branchformer/sample2/src.mp3" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/branchformer/sample2/ref.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/branchformer/sample2/s2ut.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+                  <td>
+                      <audio controls>
+                          <source src="waveform/branchformer/sample2/car_pretrain.wav" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                      </audio>
+                  </td>
+
+
+              </tr>
+              <tr>
+                  <td>Reference</td>
+                  <td>
+                    Cada uno de los episodios representan un mes del año
+                  </td>
+                  <td>
+                    each one of the episodes represent a month of the year
+                  </td>
+                  <td>
+                      
+                  </td>
+                  <td>
+                      
+                  </td>
+
+              </tr>
+              <tr>
+                  <td>ASR</td>
+                  <td>
+                  </td>
+                  <td>
+                  </td>
+                  <td>
+                    each one of the episodes represented a year of the year
+                  </td>
+                  <td>
+                    each one of the episode represented for month of the year
+                  </td>
+              </tr>
+
+              <tr>
+                <td>Sample3</td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/branchformer/sample3/src.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/branchformer/sample3/ref.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/branchformer/sample3/s2ut.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <audio controls>
+                        <source src="waveform/branchformer/sample3/car_pretrain.wav" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </td>
+
+
+            </tr>
+            <tr>
+                <td>Reference</td>
+                <td>
+                  Historiador, autor de varios libros sobre historia de las relaciones internacionales de España
+                </td>
+                <td>
+                  historian author of several history books about the international relationships of spain
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                    
+                </td>
+
+            </tr>
+            <tr>
+                <td>ASR</td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                  historian author of several books of the international history of spain
+                </td>
+                <td>
+                  historian author of several books about the history of the international relationships in spain
+                </td>
+            </tr>
+
+            <tr>
+              <td>Sample4</td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/branchformer/sample4/src.mp3" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/branchformer/sample4/ref.wav" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/branchformer/sample4/s2ut.wav" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+              <td>
+                  <audio controls>
+                      <source src="waveform/branchformer/sample4/car_pretrain.wav" type="audio/mpeg">
+                      Your browser does not support the audio element.
+                  </audio>
+              </td>
+
+
+          </tr>
+          <tr>
+              <td>Reference</td>
+              <td>
+                Sus historias fueron muy populares durante los años de la Gran Depresión
+              </td>
+              <td>
+                his stories were very popular during the great depression period
+              </td>
+              <td>
+                  
+              </td>
+              <td>
+                  
+              </td>
+
+          </tr>
+          <tr>
+              <td>ASR</td>
+              <td>
+              </td>
+              <td>
+              </td>
+              <td>
+                here stories were popular during the great depressions in great depression
+              </td>
+              <td>
+                his stories were very popular during the years of the great depression
+              </td>
+          </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+  </div>
+</body>
+</html>
+
