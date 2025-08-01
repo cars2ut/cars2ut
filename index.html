@@ -208,7 +208,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Enhancing End-to-End Speech-to-Speech Translation via Semantic Representation Learning with Cross-Attentive Regularization</h1>
+    <h1>Enhancing Semantic Alignment in Speech-to-Speech Translation via Text-Based Supervision and Cross-Attentive Regularization</h1>
 
     <p class="intro">
       Multitask learning has been widely explored to improve end-to-end speech-to-speech translation (S2ST) systems, typically by incorporating auxiliary speech-based tasks such as automatic speech recognition (ASR) and speech-to-text translation (S2T). However, these tasks provide only indirect semantic supervision and may introduce noise due to acoustic variability. In this work, we propose a semantically enhanced multitask framework that introduces a text-to-unit (T2U) auxiliary task to provide explicit text-level supervision. To further bridge the modality gap between speech and text, we employ Cross-Attentive Regularization (CAR), an attention-based loss that encourages alignment between speech and text encoder representations. We also adopt a teacher-student training strategy where a pretrained T2U model serves as a fixed semantic teacher to guide the speech encoder. Experiments on the CVSS-C corpus show that our method consistently improves over a basic S2UT baseline, achieving BLEU gains of +2.0 (Fr–En), +3.8 (Es–En),and +2.4 (De–Ee), along with substantial improvements in semantic similarity as measured by Sentence-BERT. Additional experiments under low-resource conditions and with alternative encoders (e.g., Branchformer) further validate the generalizability of our approach.
@@ -216,7 +216,7 @@
 
     <div class="image-section">
       <div class="image-container">
-        <img src="figure/structure.png" alt="SC-S2UT System Workflow Overview">
+        <img src="figure/structure_new.png" alt="SC-S2UT System Workflow Overview">
         <p>Figure 1: Overall architecture of the proposed S2ST framework with text-to-unit supervision and cross-attentive regularization</p>
       </div>
     </div>
